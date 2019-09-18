@@ -7,7 +7,7 @@ import { TabModel, OVERVIEW } from "./Model";
 import Animated from "react-native-reanimated";
 import spring from "./Spring";
 
-const { Value, cond, useCode, abs, call } = Animated;
+const {Value } = Animated;
 const { width } = Dimensions.get("window");
 const EXTREMITY = width * 1.1;
 const snapPoints = [-EXTREMITY, 0, EXTREMITY];
@@ -42,8 +42,7 @@ export default ({ tab: { uri, id: title }, selectedTab }: ContentProps) => {
       gestureEvent : onGestureEvent({
         translationX,
         velocityX,
-        state,
-
+        state
       }),
       translateX : spring(translationX,state,snapPoint(translationX, velocityX, snapPoints))
     }
