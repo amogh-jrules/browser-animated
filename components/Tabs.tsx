@@ -29,8 +29,13 @@ export default ({ tabs: tabsProps }: TabsProps) => {
 const translationY = new Value(0);
 const velocityY = new Value(0);
 const state = new Value(State.UNDETERMINED);
+const translateY1 = diffClamp(
+  decay(translationY,state,velocityY),
+  -tabs.length*150,
+  0
+);
     return {
-      translateY : decay(translationY,state,velocityY),
+      translateY : bInterpolate(transitionValue, translateY1,0),
       gestureEvent: onGestureEvent({
         state,
         translationY,
