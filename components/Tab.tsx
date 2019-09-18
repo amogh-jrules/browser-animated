@@ -6,10 +6,12 @@ import {
   Platform,
   View
 } from "react-native";
-
+import Animated from "react-native-reanimated";
 import Content from "./Content";
 import { TabModel, OVERVIEW } from "./Model";
+import { bInterpolate } from "react-native-redash";
 
+const {multiply, sin, abs,divide,sub} = Animated;
 const perspective = 1000;
 const { height } = Dimensions.get("window");
 
@@ -19,9 +21,11 @@ interface TabProps {
   index: number;
   closeTab: () => void;
   selectTab: () => void;
+  transition : Animated.Node<number>;
 }
 
 export default ({
+  transition,
   tab,
   selectedTab,
   index,
@@ -31,16 +35,16 @@ export default ({
   const H = -height / 2;
   const position = index > selectedTab ? height : 0;
   const top = selectedTab === OVERVIEW ? index * 150 : position;
-  const rotateX = selectedTab === OVERVIEW ? -Math.PI / 6 : 0;
-  const z = H * Math.sin(Math.abs(rotateX));
+  const rotateX = bInterpolate(transition, -Math.PI / 6,0);
+  const z = multiply(H,sin(abs(rotateX)));
   const transform = [
     { perspective },
-    { rotateX: `${rotateX}rad` },
-    { scale: perspective / (perspective - z) }
+    { rotateX },
+    { scale: divide(perspective, sub(perspective, z)) }
   ];
   return (
     <TouchableWithoutFeedback {...{ onPress }}>
-      <View
+      <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
           height,
@@ -49,7 +53,7 @@ export default ({
         }}
       >
         <Content {...{ closeTab, tab, selectedTab }} />
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };
