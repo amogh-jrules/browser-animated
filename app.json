@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "safari-tabs",
-    "slug": "safari-tabs",
+    "name": "browser-animated",
+    "slug": "browser-animated",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
@@ -25,6 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "An attempt to replicate the safari browser UI from iOS complete with animations and swipe gestures",
+    "githubUrl": "https://github.com/amogh-jrules/browser-animated"
   }
 }

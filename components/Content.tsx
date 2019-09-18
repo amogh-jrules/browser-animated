@@ -7,7 +7,7 @@ import { TabModel, OVERVIEW } from "./Model";
 import Animated from "react-native-reanimated";
 import spring from "./Spring";
 
-const {Value } = Animated;
+const { Value, cond, useCode, abs, call } = Animated;
 const { width } = Dimensions.get("window");
 const EXTREMITY = width * 1.1;
 const snapPoints = [-EXTREMITY, 0, EXTREMITY];
@@ -32,7 +32,7 @@ interface ContentProps {
   selectedTab: number;
 }
 
-export default ({ tab: { uri, id: title }, selectedTab }: ContentProps) => {
+export default ({ tab: { uri, id: title },closeTab, selectedTab }: ContentProps) => {
   const offset = selectedTab === OVERVIEW ? 0 : Constants.statusBarHeight;
   const {gestureEvent,translateX} = useMemo(()=>{
     const translationX = new Value(0);
@@ -46,7 +46,11 @@ export default ({ tab: { uri, id: title }, selectedTab }: ContentProps) => {
       }),
       translateX : spring(translationX,state,snapPoint(translationX, velocityX, snapPoints))
     }
-  })
+  },[]);
+  useCode(
+    cond(approximates(abs(translateX), EXTREMITY, 10), call([], closeTab)),
+    [translateX, closeTab]
+  );
   return (
     <PanGestureHandler {...gestureEvent}>
     <Animated.View style={[styles.container,{transform :[{translateX}] }]}>
